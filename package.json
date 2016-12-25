@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "flow-bin": "^0.37.4",
+    "flowtype": "^2.0.0",
     "react-scripts": "0.8.4"
   },
   "dependencies": {
+    "graphlib": "^2.1.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
   },

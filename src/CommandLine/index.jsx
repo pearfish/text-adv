@@ -1,7 +1,6 @@
 import React from 'react';
 
 import CommandLineInput from './CommandLineInput';
-import CommandLineHistory from './CommandLineHistory';
 import styles from './styles/index.css';
 
 
@@ -15,13 +14,12 @@ class CommandLine extends React.Component {
     constructor(props) {
         super(props);
 
-        const {defaultValue} = props;
-
         this.state = {
-            value: defaultValue,
+            value: '',
             history: []
         };
 
+        this.attemptAutocomplete = this.attemptAutocomplete.bind(this);
         this.runCommand = this.runCommand.bind(this);
         this.keyListener = this.keyListener.bind(this);
     }
@@ -34,15 +32,27 @@ class CommandLine extends React.Component {
         global.removeEventListener('keydown', this.keyListener);
     }
 
+    //TODO
+    attemptAutocomplete() {
+        const typed = this.state.value;
+        const candidates = this.props.autocompleteWords;
+
+        // candidates.forEach(word => {
+        //     const regxp = new RegExp(`^${word}$`);
+        //
+        // });
+    }
+
     runCommand(command) {
         const {history} = this.state;
-
-        console.log('command invoked: ' + command);
+        const {handleCommand} = this.props;
 
         this.setState({
             value: '',
             history: history.concat([command])
         });
+
+        handleCommand(command);
     }
 
     keyListener(e) {
@@ -53,13 +63,23 @@ class CommandLine extends React.Component {
             keyCode
         } = e;
 
-        if (keyCode === KEYCODES.ENTER && !!value) {
-            e.preventDefault();
-            this.runCommand(value);
-        } else {
-            this.setState({
-                value
-            });
+        switch (keyCode) {
+            case KEYCODES.ENTER:
+                if (!!value) {
+                    this.runCommand(value);
+                }
+                e.preventDefault();
+                break;
+
+            case KEYCODES.TAB:
+                this.attemptAutocomplete();
+                e.preventDefault();
+                break;
+
+            default:
+                this.setState({
+                    value
+                });
         }
     }
 
@@ -68,7 +88,6 @@ class CommandLine extends React.Component {
 
         return (
             <div className={styles.cmdWrapper}>
-                <CommandLineHistory history={history} />
                 <CommandLineInput
                     value={value}
                     onChange={this.keyListener}
