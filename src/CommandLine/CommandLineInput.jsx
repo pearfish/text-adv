@@ -1,45 +1,33 @@
 import React from 'react';
 
+import styles from './styles/index.css';
+
 const KEYCODES = {
     BACKSPACE: 8,
     TAB: 9 ,
     ENTER: 13
 };
 
-//TODO this component doesnt need to be stateful
-
 class CommandLineInput extends React.Component {
-    component(props) {
+    constructor(props) {
         super(props);
 
         this.onKeyDown = this.onKeyDown.bind(this);
     }
 
     onKeyDown(e) {
+        const value = e.target.value;
+        const {onEnter, onChange} = this.props;
 
         switch (e.keyCode) {
-            case KEYCODES.BACKSPACE:
-                if (!this.value && e.keyCode ) {
-                    //more is TODO
-                    return;
-                }
-                break;
-
-            case KEYCODES.TAB:
-                e.preventDefault();
-                //TODO: tab completion
-                break;
-
             case KEYCODES.ENTER:
-                if(this.value) {
-                    var aCommand = this.value;
-                    this.value = '';
-
-                    addHistory('> ' + aCommand);
-                    output(aCommand)
-                    doCommand(aCommand);
+                if(value) {
+                    onEnter(value);
                 }
+                e.preventDefault();
                 break;
+            default:
+                onChange(value);
         }
     }
 
@@ -47,7 +35,11 @@ class CommandLineInput extends React.Component {
         const {value} = this.props;
 
         return (
-            <input value={value} onChange={this.onKeyDown} />
+            <input
+                className={styles.inputBar}
+                value={value}
+                onChange={this.onKeyDown}
+            />
         );
     }
 }

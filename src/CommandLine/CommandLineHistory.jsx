@@ -1,13 +1,15 @@
 import React from 'react';
 
-import styles from './styles';
+import styles from './styles/index.css';
 
-export const CommandLineHistory = ({history}) => (
+const CommandLineHistory = ({history}) => (
     <ul className={styles.historyWrapper}>
         {
             history.map(h => (
                 <li className={styles.historyItem}>{h}</li>
-            ));
+            ))
         }
     </ul>
 );
+
+export default CommandLineHistory;
