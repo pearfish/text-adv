@@ -5,8 +5,8 @@ import styles from './styles/index.css';
 const CommandLineHistory = ({history}) => (
     <ul className={styles.historyWrapper}>
         {
-            history.map(h => (
-                <li className={styles.historyItem}>{h}</li>
+            history.map((h, i) => (
+                <li key={i} className={styles.historyItem}>{h}</li>
             ))
         }
     </ul>
